@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Roulette Wheel</title>
+    <script src="src/ctrl/initialize.js"></script>
+    <script src="src/model/rotateWheel.js"></script>
+    <script src="src/view/rouletteDisplay.js"></script>
+    <script>
+        window.onload = rt.view.rouletteDisplay.setupUserInterface;
+    </script>
+</head>
+<style>
+    *{
+        padding: 0;
+        margin: auto;
+        box-sizing: border-box;
+    }
+
+    body{
+        overflow: hidden;
+        min-height: 100vh;
+        background-image: linear-gradient(to bottom right, #004225, #00774d);
+    }
+    .outercontainer{
+        margin-top: 100px;
+        height: 600px;
+        width: 1000px;
+        margin-right: auto;
+        margin-left: auto;
+        position: relative;
+        background-image: linear-gradient(to bottom right, #541b00, #832a00);
+        border:solid 5px #541b00;
+        box-shadow: 0 0 20px #2d1000;
+        display: flex;
+        justify-content: center;
+    }
+    .chipscontainer{
+        height: 150px;
+        width: 500px;
+        margin-top: 100px;
+        margin-right: auto;
+        margin-left: 150px;
+        margin-bottom: 300px;
+        position: relative;
+        background-image: linear-gradient(to bottom right, #541b00, #832a00);
+        border:solid 5px #541b00;
+        box-shadow: 0 0 20px #2d1000;
+        display: flex;
+        justify-content: center;
+    }
+    .spreadsheet{
+        margin-top: 100px;
+        margin-left: auto;
+        margin-right: 450px;
+        position: absolute;
+        background: #c04000;
+        box-shadow: 0 0 20px #c04000;
+        height: 400px;
+        width: 400px;
+        display: block;
+        font-size:20px;
+        padding:4px 2px;
+        border:solid 5px #9d3400;
+        justify-content: center;
+    }
+    .container{
+        margin-top: 100px;
+        margin-left: 450px;
+        margin-right: auto;
+        position: absolute;
+        background: #c04000;
+        box-shadow: 0 0 20px #c04000;
+        border:solid 5px #9d3400;
+        height: 400px;
+        width: 400px;
+        display: flex;
+        justify-content: center;
+    }
+    .parent{
+        height: 350px;
+        width: 350px;
+        background: #ffd700;
+        position: relative;
+        border-radius: 50%;
+        overflow: hidden;
+        box-shadow: 0 0 50px #FFD700;
+        transition: 3s all;
+        display: flex;
+        justify-content: center;
+    }
+
+    #parent > * {
+
+    }
+
+    #innerchips {
+        position: absolute;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 20px;
+        padding: 10px;
+    }
+
+    #chips {
+        font-size: 50px;
+        font-family: Monaco,serif;
+        color: #ffd600;
+        text-shadow: goldenrod;
+        font-weight: bold;
+        letter-spacing: 4px;
+    }
+
+    #wheel {
+        display: block;
+        justify-content: center;
+        width: 100%;
+        position: absolute;
+        overflow: hidden;
+        transition: 3s all;
+        transform-origin: center;
+    }
+
+    #coin {
+        display: block;
+        width: 20%;
+        position: absolute;
+        margin-left: auto;
+        margin-right: 275px;
+        margin-top: 20px;
+        overflow: hidden;
+    }
+
+    #textlign{
+        display: block;
+        width: 200px;
+        height: 100px;
+        padding-top: 25px;
+        margin-left: auto;
+        margin-right: auto;
+        position: relative;
+    }
+    #spin {
+        height: 100px;
+        width: 200px;
+        margin-top: 250px;
+        background: #e1b900;
+        position: absolute;
+        font-size: 50px;
+        font-family: Monaco,serif;
+        color: #ffd600;
+        font-weight: bold;
+        letter-spacing: 4px;
+        border: 5px solid goldenrod;
+        cursor: pointer;
+        box-shadow: 0 5px 20px darkgoldenrod;
+        transition: 0.2s all;
+        display: block;
+    }
+
+    #stopper{
+        display: block;
+        position: absolute;
+        background: #FFD700;
+        box-shadow: 0 0 10px #e1b900;
+        height: 45px;
+        width: 35px;
+        clip-path: polygon(100% 0,50% 100%, 0 0);
+        z-index: 99;
+    }
+
+    #innerStopper{
+        display: block;
+        position: absolute;
+        background: #e1b900;
+        height: 90%;
+        width: 60%;
+        left:50%; top:50%; transform: translate(-50%, -50%);
+        clip-path: polygon(100% 0,50% 100%, 0 0);
+        z-index: 100;
+    }
+
+    p{
+        padding:4px 2px;
+        background: #7c2500;
+        border: 5px solid goldenrod;
+        width:200px;
+        text-align: center;
+        margin-top: 50px;
+        margin-left: auto;
+        margin-right: 100px;
+    }
+
+
+</style>
+<body>
+    <div class="outercontainer">
+        <form class="spreadsheet" id="spreadsheet">
+            <p class="outerBetSelect1" id="outerBetSelect1">
+                <label>Select bet type:
+                    <select name="selectBet" id="selectBet"><option value=""> --- </option></select>
+                </label>
+            </p>
+            <p class="outerBetSelect2" id="outerBetSelect2">
+                <label> Bet:
+                    <input name="betAmount" id="betAmount"/>
+                </label>
+            </p>
+        </form>
+        <div class="container">
+            <div class="parent">
+                <img src="./images/roulette.png" alt="roulette wheel" id="wheel" />
+            </div>
+            <div class="stopper" id="stopper">
+                <div class="innerStopper" id="innerStopper"></div>
+            </div>
+        </div>
+        <div class="textlign" id="textlign">
+            <input type="button" value="SPIN"  id="spin" />
+        </div>
+    </div>
+    <div class="chipscontainer">
+        <img src="./images/coin.png" alt="coin" id="coin" />
+        <div class="innerchipscontainer" id="innerchips">
+            <label id="chips">1000</label>
+        </div>
+    </div>
+</body>
+</html>
